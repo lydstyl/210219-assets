@@ -23,9 +23,14 @@ export async function toGoogleCalc(balances) {
     sheet.getCell(0, 2).value = 'PRICE'
 
     balances.forEach((row, index) => {
+      if (row.symbol === 'BTC') {
+        row.quantity += 1.1 // add ledgers sum BTC
+      }
+
       sheet.getCell(index + 1, 0).value = row.symbol
       sheet.getCell(index + 1, 1).value = row.quantity
       sheet.getCell(index + 1, 2).value = row.priceUsd
+      // sheet.getCell(index + 1, 3).formula = '=A1'
     })
 
     await sheet.saveUpdatedCells()

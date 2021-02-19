@@ -50,6 +50,12 @@ export function addUsdValues(balances) {
     try {
       const usdPrices: any = await fetchUsdPrices()
 
+      usdPrices.push({
+        symbol: 'USD',
+        priceUsd: 1,
+        quantity: balances.USD,
+      })
+
       balances = usdPrices
         .map((crypto) => {
           for (const key in balances) {
