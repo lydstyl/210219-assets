@@ -32,12 +32,14 @@
   "author": "Gabriel Brun",
   "license": "ISC",
   "dependencies": {
+    "@types/google-spreadsheet": "^3.0.2",
     "ccxt": "^1.42.5",
     "dotenv": "^8.2.0",
     "eslint-scope": "^5.1.1",
     "eslint-utils": "^2.1.0",
     "eslint-visitor-keys": "^2.0.0",
     "google-spreadsheet": "^3.1.15",
-    "mime-types": "^2.1.28"
+    "mime-types": "^2.1.28",
+    "node-fetch": "^2.6.1"
   }
 }

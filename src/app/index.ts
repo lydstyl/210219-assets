@@ -2,19 +2,29 @@
 
 require('dotenv').config()
 
-const { GoogleSpreadsheet } = require('google-spreadsheet')
+import { GoogleSpreadsheet } from 'google-spreadsheet'
 const creds = require('../../client_secret.json')
 
 import { removeNullValues, toFetchingObjects, toPromises } from './exchange'
+import { sumSelectedCurrencies, addUsdValues } from './crypto'
 
 const exchanges = ['bitstamp', 'bittrex', 'poloniex']
 
+///////////////////////////////////////////////////////
 function toBalance(exchanges) {
-  Promise.all(exchanges).then((balances: any) => {
+  Promise.all(exchanges).then(async (balances: any) => {
     balances = balances.map((balance) => {
       return removeNullValues(balance.total)
     })
-    console.log('🚀 ~ balances=balances.map ~ balances', balances)
+
+    balances = sumSelectedCurrencies(balances)
+
+    balances = await addUsdValues(balances) ///////////////////////////
+    console.log('🚀 ~ Promise.all ~ balances', balances)
+
+    // toGoogleCalc
+
+    // console.log('🚀 ~ balances=balances.map ~ balances', balances)
   })
 }
 
@@ -27,22 +37,28 @@ function fetchAll(exchanges) {
 }
 
 fetchAll(exchanges)
+///////////////////////////////////////////////////////
 
-async function accessSpreadsheet() {
-  const doc = new GoogleSpreadsheet(
-    '1QerSxiIVrG5h8hlJT94OaMeo1KJfNlJQOgsDEsF-MIg',
-  )
+// async function accessSpreadsheet() {
+//   const doc = new GoogleSpreadsheet(
+//     '1QerSxiIVrG5h8hlJT94OaMeo1KJfNlJQOgsDEsF-MIg',
+//   )
 
-  console.log('🚀 ~ accessSpreadsheet ~ creds', creds)
+//   try {
+//     await doc.useServiceAccountAuth(creds)
 
-  try {
-    await doc.useServiceAccountAuth(creds)
+//     await doc.loadInfo() // loads document properties and worksheets
 
-    await doc.loadInfo() // loads document properties and worksheets
-    console.log(doc.title)
-  } catch (error) {
-    console.log('🚀 ~ accessSpreadsheet ~ error', error.message)
-  }
-}
+//     const sheet = doc.sheetsByTitle['Feuille 3'] // the first sheet
 
-accessSpreadsheet()
+//     await sheet.loadCells('A1:E10') // loads a range of cells
+
+//     const a1 = (sheet.getCell(9, 4).value = 44)
+
+//     await sheet.saveUpdatedCells()
+//   } catch (error) {
+//     console.log('🚀 ~ accessSpreadsheet ~ error', error.message)
+//   }
+// }
+
+// accessSpreadsheet()

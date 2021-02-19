@@ -1,0 +1,14 @@
+###
+GET api.coincap.io/v2/assets?ids=bitcoin,ethereum,monero
+content-type: application/json
+
+{
+    "ids": "BTC,ETH,XRP",
+}
+###
+GET api.coincap.io/v2/assets?limit=2
+content-type: application/json
+
+{
+    "ids": "BTC,ETH,XRP",
+}
