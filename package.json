@@ -20,7 +20,7 @@
     "typescript": "^4.1.3"
   },
   "name": "210219-assets",
-  "description": "Utilisation d'API de différents exchanges.",
+  "description": "Utilisation d'API de différents exchanges de cryptos.",
   "version": "1.0.0",
   "keywords": [
     "TS",
