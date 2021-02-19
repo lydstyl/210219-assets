@@ -2,6 +2,49 @@
 const ccxt = require('ccxt')
 require('dotenv').config()
 
+const exchanges = ['bitstamp', 'bittrex', 'poloniex', 'binance']
+
+function toFetchingObjects(exchanges) {
+  exchanges = exchanges.map((exchangeId) => {
+    const exchangeName = exchangeId.toUpperCase()
+
+    let KEY = exchangeName + '_KEY'
+    KEY = process.env[KEY]
+
+    let SECRET = exchangeName + '_SECRET'
+    SECRET = process.env[SECRET]
+
+    const exchange = {
+      exchangeId,
+      KEY,
+      SECRET,
+      uid: '',
+    }
+
+    if (exchangeId === 'bitstamp') {
+      exchange.uid = process.env.BITSTAMP_UID
+    }
+
+    return exchange
+  })
+
+  return exchanges
+}
+
+function toPromises(exchanges) {
+  exchanges = exchanges.map((ex) => {
+    const exchangeClass = ccxt[ex.exchangeId]
+    return new exchangeClass({
+      apiKey: ex.KEY,
+      secret: ex.SECRET,
+      uid: ex.uid,
+      timeout: 30000,
+    }).fetchBalance()
+  })
+
+  return exchanges
+}
+
 function removeNullValues(object) {
   const newObject = {}
 
@@ -14,51 +57,21 @@ function removeNullValues(object) {
   return newObject
 }
 
-;(async function () {
-  const bitstamp = new ccxt.bitstamp({
-    apiKey: process.env.BITS_KEY,
-    secret: process.env.BITS_SECRET,
-    uid: process.env.BITS_UID,
+function toBalance(exchanges) {
+  Promise.all(exchanges).then((balances: any) => {
+    balances = balances.map((balance) => {
+      return removeNullValues(balance.total)
+    })
+    console.log('🚀 ~ balances=balances.map ~ balances', balances)
   })
+}
 
-  let bitstampBalance = await bitstamp.fetchBalance()
-  bitstampBalance = bitstampBalance.total
-  bitstampBalance = removeNullValues(bitstampBalance)
-  console.log('🚀 ~ bitstampBalance', bitstampBalance)
+function fetchAll(exchanges) {
+  exchanges = toFetchingObjects(exchanges)
 
-  const binance = new ccxt.binance({
-    apiKey: process.env.BINA_KEY,
-    secret: process.env.BINA_SECRET,
-  })
+  exchanges = toPromises(exchanges)
 
-  let binanceBalance = await binance.fetchBalance()
+  toBalance(exchanges)
+}
 
-  binanceBalance = binanceBalance.total
-  binanceBalance = removeNullValues(binanceBalance)
-
-  console.log('🚀 ~ binanceBalance', binanceBalance)
-
-  const bittrex = new ccxt.bittrex({
-    apiKey: process.env.BITT_KEY,
-    secret: process.env.BITT_SECRET,
-  })
-
-  let bittrexBalance = await bittrex.fetchBalance()
-
-  bittrexBalance = bittrexBalance.total
-  bittrexBalance = removeNullValues(bittrexBalance)
-
-  console.log('🚀 ~ bittrexBalance', bittrexBalance)
-
-  const poloniex = new ccxt.poloniex({
-    apiKey: process.env.POLO_KEY,
-    secret: process.env.POLO_SECRET,
-  })
-
-  let poloniexBalance = await poloniex.fetchBalance()
-
-  poloniexBalance = poloniexBalance.total
-  poloniexBalance = removeNullValues(poloniexBalance)
-
-  console.log('🚀 ~ poloniexBalance', poloniexBalance)
-})()
+fetchAll(exchanges)
