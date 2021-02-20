@@ -14,6 +14,8 @@ function toBalance(exchanges) {
       return removeNullValues(balance.total)
     })
 
+    console.log('🚀 ~ Promise.all ~ balances', balances)
+
     balances = sumSelectedCurrencies(balances)
 
     balances = await addUsdValues(balances)

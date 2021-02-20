@@ -34,6 +34,10 @@ export async function toGoogleCalc(balances) {
     })
 
     await sheet.saveUpdatedCells()
+
+    console.log(
+      'https://docs.google.com/spreadsheets/d/1QerSxiIVrG5h8hlJT94OaMeo1KJfNlJQOgsDEsF-MIg/edit#gid=2144089454',
+    )
   } catch (error) {
     console.log('🚀 ~ accessSpreadsheet ~ error', error.message)
   }
