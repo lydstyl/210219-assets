@@ -1,5 +1,4 @@
 import { GoogleSpreadsheet } from 'google-spreadsheet'
-import { resolve } from 'path'
 const creds = require('../../client_secret.json')
 
 export async function toGoogleCalc(balances) {
@@ -17,6 +16,7 @@ export async function toGoogleCalc(balances) {
     await sheet.loadCells('A1:M20') // loads a range of cells
 
     console.log('🚀 ~ toGoogleCalc ~ balances', balances)
+
     // const a1 = (sheet.getCell(9, 4).value = 44)
     sheet.getCell(0, 0).value = 'SYMBOL'
     sheet.getCell(0, 1).value = 'QUANTITY'
