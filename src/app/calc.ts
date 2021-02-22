@@ -13,7 +13,14 @@ export async function toGoogleCalc(balances) {
 
     const sheet = doc.sheetsByTitle['portefeuille'] // the first sheet
 
-    await sheet.loadCells('A1:M20') // loads a range of cells
+    await sheet.loadCells('A1:C20') // loads a range of cells
+
+    // clear previews data
+    for (let row = 0; row < 20; row++) {
+      for (let col = 0; col < 3; col++) {
+        sheet.getCell(row, col).value = ''
+      }
+    }
 
     console.log('🚀 ~ toGoogleCalc ~ balances', balances)
 
@@ -21,6 +28,21 @@ export async function toGoogleCalc(balances) {
     sheet.getCell(0, 0).value = 'SYMBOL'
     sheet.getCell(0, 1).value = 'QUANTITY'
     sheet.getCell(0, 2).value = 'PRICE'
+
+    balances = balances
+      .map((row, index) => {
+        return { ...row, total: row.quantity * row.priceUsd } // add total
+      })
+      .sort((a, b) => {
+        // sort by total
+        if (a.total < b.total) {
+          return 1
+        }
+        if (a.total > b.total) {
+          return -1
+        }
+        return 0
+      })
 
     balances.forEach((row, index) => {
       if (row.symbol === 'BTC') {
