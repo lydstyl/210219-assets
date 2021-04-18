@@ -8,6 +8,7 @@ export const CURRENCIES = [
   // 'ETH',
   'XRP',
   'QTUM',
-  'LSK',
-  'EOS',
+  // 'LSK',
+  //'EOS',
 ]
+export const LEDGER_BTC_AMOUNT = 0.62

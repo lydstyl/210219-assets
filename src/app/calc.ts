@@ -1,4 +1,5 @@
 import { GoogleSpreadsheet } from 'google-spreadsheet'
+import { LEDGER_BTC_AMOUNT } from './settings'
 const creds = require('../../client_secret.json')
 
 export async function toGoogleCalc(balances) {
@@ -29,6 +30,8 @@ export async function toGoogleCalc(balances) {
     sheet.getCell(0, 1).value = 'QUANTITY'
     sheet.getCell(0, 2).value = 'PRICE'
 
+    // addLedgerAssets
+
     balances = balances
       .map((row, index) => {
         return { ...row, total: row.quantity * row.priceUsd } // add total
@@ -46,7 +49,7 @@ export async function toGoogleCalc(balances) {
 
     balances.forEach((row, index) => {
       if (row.symbol === 'BTC') {
-        row.quantity += 1.1 // add ledgers sum BTC
+        row.quantity += LEDGER_BTC_AMOUNT // add ledgers sum BTC
       }
 
       sheet.getCell(index + 1, 0).value = row.symbol
