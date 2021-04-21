@@ -4,11 +4,9 @@ export const CURRENCIES = [
   'USD',
   'USDC',
   'DAI',
-  // 'USDT',
+  'ADA',
   // 'ETH',
   'XRP',
   'QTUM',
-  // 'LSK',
-  //'EOS',
 ]
 export const LEDGER_BTC_AMOUNT = 0.62
