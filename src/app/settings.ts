@@ -5,7 +5,7 @@ export const CURRENCIES = [
   'USDC',
   'DAI',
   'ADA',
-  // 'ETH',
+  'ETH',
   'XRP',
   'QTUM',
 ]
