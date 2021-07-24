@@ -4,15 +4,20 @@ require('dotenv').config()
 
 import { removeNullValues, toFetchingObjects, toPromises } from './exchange'
 import { sumSelectedCurrencies, addUsdValues } from './crypto'
-import { toGoogleCalc } from './calc'
-import { exchanges } from './settings'
-console.log('🚀 ~ exchanges', exchanges)
+import { toGoogleCalc, exchangesBalanceToCalc } from './calc'
+import { exchanges, CURRENCIES } from './settings'
+
+const exchangesNames = exchanges
 
 function toBalance(exchanges) {
   Promise.all(exchanges).then(async (balances: any) => {
     balances = balances.map((balance) => {
       return removeNullValues(balance.total)
     })
+
+    // console.log('🚀 ~ Promise.all ~ balances', balances)
+
+    exchangesBalanceToCalc(exchangesNames, balances, CURRENCIES)
 
     balances = sumSelectedCurrencies(balances)
 
