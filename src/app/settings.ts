@@ -1,6 +1,5 @@
 export const exchanges = ['bitstamp', 'bittrex', 'poloniex', 'binance']
 export const CURRENCIES = ['BTC', 'USD', 'USDC', 'DAI', 'XRP']
-export const LEDGER_BTC_AMOUNT = 0
 
 function setLedgers(CURRENCIES) {
   const ledgers = { ledger1: {}, ledger2: {} }
@@ -16,3 +15,5 @@ function setLedgers(CURRENCIES) {
 }
 
 export const LEDGERS_BALANCES = setLedgers(CURRENCIES)
+
+export const LEDGERS_BTC_AMOUNT = 0 // todo manually ledger 1 + ledger 2 in BTC
