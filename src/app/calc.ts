@@ -1,6 +1,7 @@
 import { GoogleSpreadsheet } from 'google-spreadsheet'
 import { CURRENCIES, LEDGER_BTC_AMOUNT, LEDGERS_BALANCES } from './settings'
 const creds = require('../../client_secret.json')
+import { fetchUsdPrices } from './crypto'
 
 export async function toGoogleCalc(balances) {
   const doc = new GoogleSpreadsheet(
@@ -22,8 +23,6 @@ export async function toGoogleCalc(balances) {
         sheet.getCell(row, col).value = ''
       }
     }
-
-    console.log('🚀 ~ toGoogleCalc ~ balances', balances)
 
     // const a1 = (sheet.getCell(9, 4).value = 44)
     sheet.getCell(0, 0).value = 'SYMBOL'
@@ -68,12 +67,18 @@ export async function toGoogleCalc(balances) {
   }
 }
 
-export function exchangesBalanceToCalc(exchangesNames, balances, CURRENCIES) {
-  const exchangesBalances = createExchangesBalances(
+export async function exchangesBalanceToCalc(
+  exchangesNames,
+  balances,
+  CURRENCIES,
+) {
+  let exchangesBalances = createExchangesBalances(
     exchangesNames,
     balances,
     CURRENCIES,
   )
+
+  exchangesBalances = await addUSDValues(exchangesBalances)
 
   toCalc(exchangesBalances)
 }
@@ -98,8 +103,6 @@ function createExchangesBalances(exchangesNames, balances, CURRENCIES) {
 }
 
 async function toCalc(exchangesBalances) {
-  console.log('🚀 ~ toCalc ~ exchangesBalances', exchangesBalances)
-
   const doc = new GoogleSpreadsheet(
     '1QerSxiIVrG5h8hlJT94OaMeo1KJfNlJQOgsDEsF-MIg',
     // '1rrYVxvKNLXrD-eiQLOD4hc0Clpp4xPAINc5d70VOv5c', // Google API error - [403] The caller does not have permission
@@ -107,14 +110,14 @@ async function toCalc(exchangesBalances) {
 
   try {
     await doc.useServiceAccountAuth(creds)
-    await doc.loadInfo() // loads document properties and worksheets
+    await doc.loadInfo()
 
-    const sheet = doc.sheetsByTitle['exchanges'] // the first sheet
+    const sheet = doc.sheetsByTitle['exchanges']
 
     const rows = CURRENCIES.length + 1,
-      cols = 7
+      cols = 8
 
-    await sheet.loadCells(`A1:G${rows}`) // loads a range of cells
+    await sheet.loadCells(`A1:H${rows}`) // loads a range of cells
 
     // clear previews data
     for (let row = 0; row < rows; row++) {
@@ -143,4 +146,29 @@ async function toCalc(exchangesBalances) {
   } catch (error) {
     console.log('🚀 ~ accessSpreadsheet ~ error', error.message)
   }
+}
+
+async function addUSDValues(exchangesBalances) {
+  const usdPricesAsExchange = {}
+
+  CURRENCIES.forEach((cur) => {
+    usdPricesAsExchange[cur] = 0
+  })
+
+  let usdPrices: any = await fetchUsdPrices()
+
+  usdPrices = usdPrices
+    .filter((crypto) => {
+      return CURRENCIES.includes(crypto.symbol)
+    })
+    .map((c) => ({ ...c, priceUsd: parseFloat(c.priceUsd) }))
+
+  usdPrices.forEach((c) => {
+    usdPricesAsExchange[c.symbol] = c.priceUsd
+  })
+
+  usdPricesAsExchange['USD'] = 1
+
+  exchangesBalances.usePrices = usdPricesAsExchange
+  return exchangesBalances
 }

@@ -26,7 +26,7 @@ interface Crypto {
   priceUsd: number
 }
 
-function fetchUsdPrices() {
+export function fetchUsdPrices() {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await fetch('http://api.coincap.io/v2/assets?limit=100')
@@ -54,11 +54,6 @@ export function addUsdValues(balances) {
         priceUsd: 1,
         quantity: balances.USD,
       })
-
-      console.log(
-        'usdPrices.map',
-        usdPrices.map((c) => c.symbol),
-      )
 
       balances = usdPrices
         .map((crypto) => {
