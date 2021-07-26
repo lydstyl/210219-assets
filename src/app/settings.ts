@@ -17,3 +17,5 @@ function setLedgers(CURRENCIES) {
 export const LEDGERS_BALANCES = setLedgers(CURRENCIES)
 
 export const LEDGERS_BTC_AMOUNT = 0 // todo manually ledger 1 + ledger 2 in BTC
+
+export const GOOGLE_CALC_ID = '' // todo import in calc.ts

@@ -15,8 +15,6 @@ function toBalance(exchanges) {
       return removeNullValues(balance.total)
     })
 
-    // console.log('🚀 ~ Promise.all ~ balances', balances)
-
     exchangesBalanceToCalc(exchangesNames, balances, CURRENCIES)
 
     balances = sumSelectedCurrencies(balances)

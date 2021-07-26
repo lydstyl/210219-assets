@@ -65,7 +65,7 @@ export async function toGoogleCalc(balances) {
     await sheet.saveUpdatedCells()
 
     console.log(
-      'https://docs.google.com/spreadsheets/d/1QerSxiIVrG5h8hlJT94OaMeo1KJfNlJQOgsDEsF-MIg/edit#gid=2144089454',
+      'https://docs.google.com/spreadsheets/d/1rrYVxvKNLXrD-eiQLOD4hc0Clpp4xPAINc5d70VOv5c/edit#gid=1877330140',
     )
   } catch (error) {
     console.log('🚀 ~ accessSpreadsheet ~ error', error.message)
@@ -147,7 +147,7 @@ async function toCalc(exchangesBalances) {
 
     await sheet.saveUpdatedCells()
     console.log(
-      'https://docs.google.com/spreadsheets/d/1QerSxiIVrG5h8hlJT94OaMeo1KJfNlJQOgsDEsF-MIg/edit#gid=2144089454',
+      'https://docs.google.com/spreadsheets/d/1rrYVxvKNLXrD-eiQLOD4hc0Clpp4xPAINc5d70VOv5c/edit#gid=1877330140',
     )
   } catch (error) {
     console.log('🚀 ~ accessSpreadsheet ~ error', error.message)
