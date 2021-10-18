@@ -7,5 +7,6 @@ C'est un script qui me permet de visualiser mon portefeuille de cryptomonnaies r
 ## Comment le faire fonctionner ?
 
 - créer un .env à partir d'une copie de .env.exemple et y ajouter les clés et secrets
+- faire de même avec le fichier client_secret.json.exemple
 - npm i
 - npm start
